@@ -1,4 +1,9 @@
-# gym-reacher2
+# gym-throwandpush
+
+#TODO - everything below here is copy-pasted. 
+
+
+
 
 This repo contains the gym environment `Reacher2-v1`.
 

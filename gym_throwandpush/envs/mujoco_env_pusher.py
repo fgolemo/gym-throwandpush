@@ -16,7 +16,7 @@ except ImportError as e:
             e))
 
 
-class MujocoReacher2Env(MujocoEnv):
+class MujocoEnvPusher2(MujocoEnv):
     def __init__(self, model_path, frame_skip, model_parameters):
         assert "arm0" in model_parameters
         assert "arm1" in model_parameters
