@@ -21,7 +21,7 @@ except ImportError as e:
 class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
     isInitialized = False
 
-    def _init(self, torques={}, topDown=False):
+    def _init(self, torques={}, topDown=False, colored=True):
         # if colors is None:
         #     # color values are "R G B", for red, green, and blue respectively
         #     # in the range from 0 to 1. For example white it "1 1 1". Red is
@@ -43,7 +43,11 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
 
         self.isInitialized = True
         utils.EzPickle.__init__(self)
-        MujocoEnvPusher2.__init__(self, 'pusher.xml', 5, params)
+        xml = 'pusher'
+        if colored:
+            xml += "-colored"
+
+        MujocoEnvPusher2.__init__(self, xml+'.xml', 5, params)
 
     def __init__(self):
         self.metadata = {
@@ -150,11 +154,12 @@ if __name__ == '__main__':
             "r_wrist_flex_joint": 1000,
             "r_wrist_roll_joint": 0.001
         },
-        topDown=True
+        topDown=True,
+        colored=True
     )
     env.reset()
 
     for i in range(100):
         env.render()
         env.step(env.action_space.sample())
-        # time.sleep(.5)
+        time.sleep(1)
