@@ -18,12 +18,12 @@ except ImportError as e:
 
 class MujocoEnvPusher2(MujocoEnv):
     def __init__(self, model_path, frame_skip, model_parameters):
-        assert "arm0" in model_parameters
-        assert "arm1" in model_parameters
-        assert "torque0" in model_parameters
-        assert "torque1" in model_parameters
-        assert "fov" in model_parameters
-        assert "colors" in model_parameters
+        # assert "lengths" in model_parameters
+        # assert len(model_parameters["lengths"]) == 7
+        assert "torques" in model_parameters
+        assert len(model_parameters["torques"]) == 7
+        # assert "fov" in model_parameters
+        # assert "colors" in model_parameters
 
         if model_path.startswith("/"):
             fullpath = model_path
@@ -48,35 +48,35 @@ class MujocoEnvPusher2(MujocoEnv):
         tree = ET.ElementTree(file=xml_file)
         root = tree.getroot()
 
-        for i in range(2):
-            bodies = "/".join(["body"] * (i + 1))
+        # for i in range(2):
+        #     bodies = "/".join(["body"] * (i + 1))
+        #
+        #     arm_value = model_parameters["arm{}".format(i)]
+        #
+        #     arm = root.find('worldbody/{}/geom'.format(bodies))
+        #     arm.set('fromto', '0 0 0 {} 0 0'.format(arm_value))
+        #
+        #     if "arm" + str(i) in model_parameters["colors"]:
+        #         arm.set('rgba', '{} 1'.format(model_parameters["colors"]["arm" + str(i)]))
+        #
+        #     body = root.find('worldbody/{}/body'.format(bodies))
+        #     body.set('pos', '{} 0 0'.format(arm_value))
 
-            arm_value = model_parameters["arm{}".format(i)]
+        for joint_name,torque_val in model_parameters["torques"].items():
+            joint = root.find('actuator/motor[@joint="{}"]'.format(joint_name))
+            joint.set('gear', str(float(torque_val)))
 
-            arm = root.find('worldbody/{}/geom'.format(bodies))
-            arm.set('fromto', '0 0 0 {} 0 0'.format(arm_value))
+        # if "arenaBackground" in model_parameters["colors"]:
+        #     arena = root.find('worldbody/geom[@type="plane"]')
+        #     arena.set('rgba', '{} 1'.format(model_parameters["colors"]["arenaBackground"]))
+        #
+        # if "arenaBorders" in model_parameters["colors"]:
+        #     arenaBorders = root.findall('worldbody/geom[@type="capsule"]')
+        #     for arenaBorder in arenaBorders:
+        #         arenaBorder.set('rgba', '{} 1'.format(model_parameters["colors"]["arenaBorders"]))
 
-            if "arm" + str(i) in model_parameters["colors"]:
-                arm.set('rgba', '{} 1'.format(model_parameters["colors"]["arm" + str(i)]))
-
-            body = root.find('worldbody/{}/body'.format(bodies))
-            body.set('pos', '{} 0 0'.format(arm_value))
-
-        for i in range(2):
-            joint = root.find('actuator/motor[@joint="joint{}"]'.format(i))
-            joint.set('gear', str(float(model_parameters["torque{}".format(i)])))
-
-        if "arenaBackground" in model_parameters["colors"]:
-            arena = root.find('worldbody/geom[@type="plane"]')
-            arena.set('rgba', '{} 1'.format(model_parameters["colors"]["arenaBackground"]))
-
-        if "arenaBorders" in model_parameters["colors"]:
-            arenaBorders = root.findall('worldbody/geom[@type="capsule"]')
-            for arenaBorder in arenaBorders:
-                arenaBorder.set('rgba', '{} 1'.format(model_parameters["colors"]["arenaBorders"]))
-
-        fovy = root.find('visual/global')
-        fovy.set('fovy', str(model_parameters["fov"]))
+        # fovy = root.find('visual/global')
+        # fovy.set('fovy', str(model_parameters["fov"]))
 
         file_name = os.path.basename(xml_file)
         tmp_dir = tempfile.gettempdir()

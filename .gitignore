@@ -3,3 +3,4 @@
 .idea
 /logs
 *~
+MUJOCO_LOG.TXT
