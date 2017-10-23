@@ -47,7 +47,7 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
         if colored:
             xml += "-colored"
 
-        MujocoEnvPusher2.__init__(self, xml+'.xml', 5, params)
+        MujocoEnvPusher2.__init__(self, xml + '.xml', 5, params)
 
     def __init__(self):
         self.metadata = {
@@ -57,8 +57,8 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
         self.obs_dim = 23
 
         self.action_space = spaces.Box(
-            np.array([-1., -1.]),
-            np.array([1., 1.])
+            -np.ones(7),
+            np.ones(7)
         )
 
         high = np.inf * np.ones(self.obs_dim)
@@ -73,6 +73,8 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
 
         vec_1 = self.get_body_com("object") - self.get_body_com("tips_arm")
         vec_2 = self.get_body_com("object") - self.get_body_com("goal")
+
+        a *= 2  # important - in the original env the range of actions is doubled
 
         reward_near = - np.linalg.norm(vec_1)
         reward_dist = - np.linalg.norm(vec_2)
@@ -143,23 +145,45 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
 
 if __name__ == '__main__':
     import gym_throwandpush
+
     env = gym.make("Pusher2-v0")
     env.env._init(
         torques={
-            "r_shoulder_pan_joint": 0.001,
-            "r_shoulder_lift_joint": 1000,
-            "r_upper_arm_roll_joint": 0.001,
-            "r_elbow_flex_joint": 1000,
-            "r_forearm_roll_joint": 0.001,
-            "r_wrist_flex_joint": 1000,
-            "r_wrist_roll_joint": 0.001
+            "r_shoulder_pan_joint": 1,
+            "r_shoulder_lift_joint": 1,
+            "r_upper_arm_roll_joint": 1,
+            "r_elbow_flex_joint": 1,
+            "r_forearm_roll_joint": 1,
+            "r_wrist_flex_joint": 1,
+            "r_wrist_roll_joint": 1
+            # "r_shoulder_pan_joint": 0.001,
+            # "r_shoulder_lift_joint": 1000,
+            # "r_upper_arm_roll_joint": 0.001,
+            # "r_elbow_flex_joint": 1000,
+            # "r_forearm_roll_joint": 0.001,
+            # "r_wrist_flex_joint": 1000,
+            # "r_wrist_roll_joint": 0.001
         },
         topDown=True,
         colored=True
     )
     env.reset()
 
+
+    def split_obs(obs):
+        qpos = obs[:7]  # robot has 7 DOF, so 7 angular positions
+        qvel = obs[7:14]  # 7 angular velocities
+        tip_pos = obs[14:17]  # 1 tip position in 3D space
+        obj_pos = obs[17:20]  # 1 object position in 3D space
+        gol_pos = obs[20:23]  # 1 goal position in 3D space
+        return (qpos, qvel, tip_pos, obj_pos, gol_pos)
+
+
     for i in range(100):
         env.render()
-        env.step(env.action_space.sample())
-        time.sleep(1)
+        action = env.action_space.sample()
+        print(action)
+        obs, reward, done, misc = env.step(action)
+        obs_tup = split_obs(np.around(obs, 3))
+        print(obs_tup)
+        # time.sleep(1)
