@@ -87,18 +87,36 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
         return ob, reward, done, dict(reward_dist=reward_dist,
                                       reward_ctrl=reward_ctrl)
 
+    #def top_down_cam(self):
+        #self.viewer.cam.trackbodyid = -1  # id of the body to track
+        #self.viewer.cam.distance = self.model.stat.extent * 1.3  # how much you "zoom in", model.stat.extent is the max limits of the arena
+        #self.viewer.cam.lookat[0] = 0  # x,y,z offset from the object
+        #self.viewer.cam.lookat[1] = 0
+        #self.viewer.cam.lookat[2] = 0
+        #self.viewer.cam.elevation = -90  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
+        #self.viewer.cam.azimuth = 0
+
     def top_down_cam(self):
         self.viewer.cam.trackbodyid = -1  # id of the body to track
-        self.viewer.cam.distance = self.model.stat.extent * 1.2  # how much you "zoom in", model.stat.extent is the max limits of the arena
-        self.viewer.cam.lookat[0] = 0  # x,y,z offset from the object
-        self.viewer.cam.lookat[1] = 0
-        self.viewer.cam.lookat[2] = 0
-        self.viewer.cam.elevation = -90  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
-        self.viewer.cam.azimuth = 0
+        self.viewer.cam.distance = 2.5  # how much you "zoom in", model.stat.extent is the max limits of the arena
+        self.viewer.cam.lookat[0] = .5  # x,y,z offset from the object
+        self.viewer.cam.lookat[1] = -.5
+        self.viewer.cam.lookat[2] = .2
+        self.viewer.cam.elevation = -40  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
+        self.viewer.cam.azimuth = 180
+
+    #def viewer_setup(self):
+        #self.viewer.cam.trackbodyid = -1
+        #self.viewer.cam.distance = 2.0
 
     def viewer_setup(self):
         self.viewer.cam.trackbodyid = -1
-        self.viewer.cam.distance = 4.0
+        self.viewer.cam.distance = 2.8
+        self.viewer.cam.lookat[0] = 0.1
+        self.viewer.cam.lookat[1] = -.4
+        self.viewer.cam.lookat[2] = 0
+        self.viewer.cam.elevation = -60  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
+        self.viewer.cam.azimuth = 90
 
     def reset_model(self):
         qpos = self.init_qpos

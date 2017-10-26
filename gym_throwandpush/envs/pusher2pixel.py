@@ -29,14 +29,16 @@ if __name__ == '__main__':
     env = gym.make("Pusher2Pixel-v0")
     env.env.env._init(
         torques={
-            "r_shoulder_pan_joint": 0.001,
-            "r_shoulder_lift_joint": 1000,
-            "r_upper_arm_roll_joint": 0.001,
-            "r_elbow_flex_joint": 1000,
-            "r_forearm_roll_joint": 0.001,
-            "r_wrist_flex_joint": 1000,
-            "r_wrist_roll_joint": 0.001
+            "r_shoulder_pan_joint": 0.05,
+            "r_shoulder_lift_joint": 500,
+            "r_upper_arm_roll_joint": 0.05,
+            "r_elbow_flex_joint": 500,
+            "r_forearm_roll_joint": 0.05,
+            "r_wrist_flex_joint": 500,
+            "r_wrist_roll_joint": 0.05
         },
+        #topDown=False,
+        #colored=False
         topDown=True,
         colored=True
     )
@@ -47,7 +49,7 @@ if __name__ == '__main__':
         print (obs.shape)
         print (img.shape)
 
-        cv2.imshow('image', img[:,:,::-1])
-        cv2.waitKey(1)
+        #cv2.imshow('image', img[:,:,::-1])
+        #cv2.waitKey(1)
         env.render()
-        time.sleep(.5)
+        time.sleep(.1)
