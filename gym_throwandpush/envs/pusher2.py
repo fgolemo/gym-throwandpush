@@ -173,6 +173,8 @@ if __name__ == '__main__':
     def split_obs(obs):
         qpos = obs[:7]  # robot has 7 DOF, so 7 angular positions
         qvel = obs[7:14]  # 7 angular velocities
+        # these two above vectors are what's interesting for sim+
+
         tip_pos = obs[14:17]  # 1 tip position in 3D space
         obj_pos = obs[17:20]  # 1 object position in 3D space
         gol_pos = obs[20:23]  # 1 goal position in 3D space
