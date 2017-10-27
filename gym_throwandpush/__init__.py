@@ -26,3 +26,8 @@ register(
     reward_threshold=4800.0,
 )
 
+register(
+    id='HalfCheetah2Pixel-v0',
+    entry_point='gym_throwandpush.envs:Cheetah2PixelEnv',
+    kwargs={'base_env_id': 'HalfCheetah2-v0'}
+)
