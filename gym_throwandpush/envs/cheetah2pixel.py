@@ -1,31 +1,27 @@
 import gym
 import numpy as np
 import time
-
+from gym import spaces
 from gym_reacher2.envs.reacher2pixel import MujocoPixelWrapper
 
 
-def Pusher2PixelEnv(base_env_id):
+def Cheetah2PixelEnv(base_env_id):
     return MujocoPixelWrapper(gym.make(base_env_id))
 
 
 if __name__ == '__main__':
     import gym_throwandpush
-    env = gym.make("Pusher2Pixel-v0")
+    env = gym.make("HalfCheetah2Pixel-v0")
     env.env.env._init(
         torques={
-            "r_shoulder_pan_joint": 0.05,
-            "r_shoulder_lift_joint": 500,
-            "r_upper_arm_roll_joint": 0.05,
-            "r_elbow_flex_joint": 500,
-            "r_forearm_roll_joint": 0.05,
-            "r_wrist_flex_joint": 500,
-            "r_wrist_roll_joint": 0.05
+            "bthigh": 120,
+            "bshin": 90,
+            "bfoot": 60,
+            "fthigh": 120,
+            "fshin": 60,
+            "ffoot": 30
         },
-        #topDown=False,
-        #colored=False
-        topDown=True,
-        colored=True
+        colored=False,
     )
     env.reset()
 
@@ -37,4 +33,4 @@ if __name__ == '__main__':
         #cv2.imshow('image', img[:,:,::-1])
         #cv2.waitKey(1)
         env.render()
-        time.sleep(.1)
+        time.sleep(.03)
