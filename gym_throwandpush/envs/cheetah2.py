@@ -39,7 +39,7 @@ class Cheetah2Env(MujocoEnvCheetah2, utils.EzPickle):
             'render.modes': ['human', 'rgb_array'],
             'video.frames_per_second': 50
         }
-        self.obs_dim = 17
+        self.obs_dim = 18
         self.act_dim = 6
 
         self.action_space = spaces.Box(
@@ -67,7 +67,7 @@ class Cheetah2Env(MujocoEnvCheetah2, utils.EzPickle):
 
     def _get_obs(self):
         return np.concatenate([
-            self.model.data.qpos.flat[1:],
+            self.model.data.qpos.flat,
             self.model.data.qvel.flat,
         ])
 
@@ -87,6 +87,7 @@ if __name__ == '__main__':
     env = gym.make("HalfCheetah-v1")
 
     print (env.action_space.high, env.action_space.low)
+    print (env.observation_space)
 
     env = gym.make("HalfCheetah2-v0")
 
@@ -119,25 +120,23 @@ if __name__ == '__main__':
     env.reset()
 
 
-    # def split_obs(obs):
-    #     qpos = obs[:7]  # robot has 7 DOF, so 7 angular positions
-    #     qvel = obs[7:14]  # 7 angular velocities
-    #     # these two above vectors are what's interesting for sim+
-    #
-    #     tip_pos = obs[14:17]  # 1 tip position in 3D space
-    #     obj_pos = obs[17:20]  # 1 object position in 3D space
-    #     gol_pos = obs[20:23]  # 1 goal position in 3D space
-    #     return (qpos, qvel, tip_pos, obj_pos, gol_pos)
+    def split_obs(obs):
+        qpos = obs[3:9]  # robot has 6 DOF, so 6 angular positions
+        qvel = obs[11:18]  # 7 angular velocities
+        # these two above vectors are what's interesting for sim+
+
+        return (qpos, qvel)
 
 
-    for i in range(1000):
+    for i in range(100):
         env.render()
         action = env.action_space.sample()
+        print (action)
         # print(action.shape)
         obs, reward, done, misc = env.step(action)
         # print (obs.shape)
         # quit()
 
-        # obs_tup = split_obs(np.around(obs, 3))
-        # print(obs_tup)
+        obs_tup = split_obs(np.around(obs, 3))
+        print(obs_tup)
         time.sleep(.03)
