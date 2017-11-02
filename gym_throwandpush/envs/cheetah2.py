@@ -63,7 +63,7 @@ class Cheetah2Env(MujocoEnvCheetah2, utils.EzPickle):
         reward_ctrl = - 0.1 * np.square(action).sum()
         reward_run = (xposafter - xposbefore)/self.dt
         reward = reward_ctrl + reward_run
-        done = False
+        done = (xposafter >= 40.0)
         return ob, reward, done, dict(reward_run=reward_run, reward_ctrl=reward_ctrl)
 
     def _get_obs(self):
