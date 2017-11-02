@@ -1,6 +1,6 @@
+import torch
 import gym
 import numpy as np
-import torch
 from gym import spaces
 
 

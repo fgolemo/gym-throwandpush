@@ -1,3 +1,4 @@
+#import torch
 import gym
 import numpy as np
 import time
@@ -97,13 +98,20 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
         #self.viewer.cam.azimuth = 0
 
     def top_down_cam(self):
-        self.viewer.cam.trackbodyid = -1  # id of the body to track
-        self.viewer.cam.distance = 2.5  # how much you "zoom in", model.stat.extent is the max limits of the arena
-        self.viewer.cam.lookat[0] = .5  # x,y,z offset from the object
-        self.viewer.cam.lookat[1] = -.5
-        self.viewer.cam.lookat[2] = .2
-        self.viewer.cam.elevation = -40  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
-        self.viewer.cam.azimuth = 180
+        #self.viewer.cam.trackbodyid = -1  # id of the body to track
+        #self.viewer.cam.distance = 2.5  # how much you "zoom in", model.stat.extent is the max limits of the arena
+        #self.viewer.cam.lookat[0] = .5  # x,y,z offset from the object
+        #self.viewer.cam.lookat[1] = -.5
+        #self.viewer.cam.lookat[2] = .2
+        #self.viewer.cam.elevation = -60  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
+        #self.viewer.cam.azimuth = 90
+        self.viewer.cam.trackbodyid = -1
+        self.viewer.cam.distance = 2.8
+        self.viewer.cam.lookat[0] = 0.1
+        self.viewer.cam.lookat[1] = -.4
+        self.viewer.cam.lookat[2] = 0
+        self.viewer.cam.elevation = -60  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
+        self.viewer.cam.azimuth = 90
 
     #def viewer_setup(self):
         #self.viewer.cam.trackbodyid = -1
@@ -182,8 +190,8 @@ if __name__ == '__main__':
             # "r_wrist_flex_joint": 1000,
             # "r_wrist_roll_joint": 0.001
         },
-        topDown=True,
-        colored=True
+        topDown=False,
+        colored=False
     )
     env.reset()
 

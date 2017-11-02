@@ -1,12 +1,13 @@
+#import torch
 import gym
 import numpy as np
 import time
 from gym import spaces
-from gym_reacher2.envs.reacher2pixel import MujocoPixelWrapper
+from gym_throwandpush.envs.mujoco_pixel_wrapper import MujocoPusherPixelWrapper
 
 
 def Cheetah2PixelEnv(base_env_id):
-    return MujocoPixelWrapper(gym.make(base_env_id))
+    return MujocoPusherPixelWrapper(gym.make(base_env_id))
 
 
 if __name__ == '__main__':
