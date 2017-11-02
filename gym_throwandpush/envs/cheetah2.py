@@ -93,7 +93,7 @@ if __name__ == '__main__':
 
     print (env.action_space.high, env.action_space.low)
     env.env._init(
-        torques={
+        torques={ # defaults
             "bthigh": 120,
             "bshin": 90,
             "bfoot": 60,

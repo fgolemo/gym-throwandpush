@@ -31,3 +31,9 @@ register(
     entry_point='gym_throwandpush.envs:Cheetah2PixelEnv',
     kwargs={'base_env_id': 'HalfCheetah2-v0'}
 )
+
+register(
+    id='HalfCheetah2Plus-v0',
+    entry_point='gym_throwandpush.envs:Cheetah2PlusEnv',
+    kwargs={'base_env_id': 'HalfCheetah2-v0'}
+)
