@@ -23,21 +23,8 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
     isInitialized = False
 
     def _init(self, torques={}, topDown=False, colored=True):
-        # if colors is None:
-        #     # color values are "R G B", for red, green, and blue respectively
-        #     # in the range from 0 to 1. For example white it "1 1 1". Red is
-        #     # "1 0 0".
-        #
-        #     colors = {
-        #         "arenaBackground": ".9 .9 .9",
-        #         "arenaBorders": "0.9 0.4 0.6",
-        #         "arm0": "0.0 0.4 0.6",
-        #         "arm1": "0.0 0.4 0.6"
-        #     }
         params = {
             "torques": torques,
-            # "fov": fov,
-            # "colors": colors
         }
         if topDown:
             self.viewer_setup = self.top_down_cam
@@ -88,23 +75,7 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
         return ob, reward, done, dict(reward_dist=reward_dist,
                                       reward_ctrl=reward_ctrl)
 
-    #def top_down_cam(self):
-        #self.viewer.cam.trackbodyid = -1  # id of the body to track
-        #self.viewer.cam.distance = self.model.stat.extent * 1.3  # how much you "zoom in", model.stat.extent is the max limits of the arena
-        #self.viewer.cam.lookat[0] = 0  # x,y,z offset from the object
-        #self.viewer.cam.lookat[1] = 0
-        #self.viewer.cam.lookat[2] = 0
-        #self.viewer.cam.elevation = -90  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
-        #self.viewer.cam.azimuth = 0
-
     def top_down_cam(self):
-        #self.viewer.cam.trackbodyid = -1  # id of the body to track
-        #self.viewer.cam.distance = 2.5  # how much you "zoom in", model.stat.extent is the max limits of the arena
-        #self.viewer.cam.lookat[0] = .5  # x,y,z offset from the object
-        #self.viewer.cam.lookat[1] = -.5
-        #self.viewer.cam.lookat[2] = .2
-        #self.viewer.cam.elevation = -60  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
-        #self.viewer.cam.azimuth = 90
         self.viewer.cam.trackbodyid = -1
         self.viewer.cam.distance = 2.8
         self.viewer.cam.lookat[0] = 0.1
@@ -112,10 +83,6 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
         self.viewer.cam.lookat[2] = 0
         self.viewer.cam.elevation = -60  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
         self.viewer.cam.azimuth = 90
-
-    #def viewer_setup(self):
-        #self.viewer.cam.trackbodyid = -1
-        #self.viewer.cam.distance = 2.0
 
     def viewer_setup(self):
         self.viewer.cam.trackbodyid = -1
@@ -146,21 +113,7 @@ class Pusher2Env(MujocoEnvPusher2, utils.EzPickle):
         return self._get_obs()
 
     def _get_obs(self):
-        # qpos (shape [4,1]) holds the angles of the 2 joints
-        # it has the form: [
-        # x angle joint 1 in rad,
-        # x angle joint 2 in rad,
-        # y angle joint 1 (constant)
-        # y angle joint 2 (constant)
-        # ]
-        theta = self.model.data.qpos.flat[:2]
         return np.concatenate([
-            # np.cos(theta),
-            # np.sin(theta), # this is the most meaningful data here,
-            # # containing the sine of the two joint angles
-            # self.model.data.qpos.flat[2:],
-            # self.model.data.qvel.flat[:2], # angular momentum of the two joints
-            # self.get_body_com("fingertip") - self.get_body_com("target")
             self.model.data.qpos.flat[:7],
             self.model.data.qvel.flat[:7],
             self.get_body_com("tips_arm"),

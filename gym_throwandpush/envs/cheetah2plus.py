@@ -18,6 +18,7 @@ class Cheetah2InferenceWrapper(gym.ObservationWrapper):
     def __init__(self, env):
         super(Cheetah2InferenceWrapper, self).__init__(env)
         env.load_model = self.load_model
+        self.env = env
 
     def load_model(self, net, modelPath):
         self.net = net
@@ -31,11 +32,23 @@ class Cheetah2InferenceWrapper(gym.ObservationWrapper):
         obs_v = obs_to_net(super_obs)
         # print(obs_v)
         obs_plus = self.net.forward(obs_v)
+
+        self._set_to_simplus(obs_plus.cpu().data.numpy()[0])
+
         # print(obs_plus)
         obs_plus_full = net_to_obs(obs_plus, super_obs)
         # print(obs_plus_full)
 
         return obs_plus_full
+
+    def _set_to_simplus(self, obs_plus):
+        qpos = self.env.env.model.data.qpos.ravel().copy()
+        qvel = self.env.env.model.data.qvel.ravel().copy()
+        # print (qpos[:2], np.sin(qpos[:2]), obs_plus[:2], np.arcsin(obs_plus[:2]))
+        qpos[range(3,9)] = obs_plus[:6]
+        qvel[range(3,9)] = obs_plus[6:]
+
+        self.env.env.set_state(qpos, qvel)
 
     def _reset(self):
         self.net.zero_hidden()  # !important
