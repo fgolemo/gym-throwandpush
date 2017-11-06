@@ -135,16 +135,9 @@ if __name__ == '__main__':
             "r_forearm_roll_joint": 1,
             "r_wrist_flex_joint": 1,
             "r_wrist_roll_joint": 1
-            # "r_shoulder_pan_joint": 0.001,
-            # "r_shoulder_lift_joint": 1000,
-            # "r_upper_arm_roll_joint": 0.001,
-            # "r_elbow_flex_joint": 1000,
-            # "r_forearm_roll_joint": 0.001,
-            # "r_wrist_flex_joint": 1000,
-            # "r_wrist_roll_joint": 0.001
         },
-        topDown=False,
-        colored=False
+        topDown=True,
+        colored=True
     )
     env.reset()
 
