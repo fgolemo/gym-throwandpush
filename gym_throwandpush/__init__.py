@@ -37,3 +37,9 @@ register(
     entry_point='gym_throwandpush.envs:Cheetah2PlusEnv',
     kwargs={'base_env_id': 'HalfCheetah2-v0'}
 )
+
+# new from Berkeley
+register(
+    id='Pusher3DOF-v1',
+    entry_point='gym_throwandpush.envs:PusherEnv3DOF',
+)

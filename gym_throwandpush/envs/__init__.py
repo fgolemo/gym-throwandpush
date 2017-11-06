@@ -6,3 +6,5 @@ from gym_throwandpush.envs.cheetah2 import Cheetah2Env
 from gym_throwandpush.envs.cheetah2pixel import Cheetah2PixelEnv
 from gym_throwandpush.envs.cheetah2plus import Cheetah2PlusEnv
 
+# from Berkeley
+from gym_throwandpush.envs.pusher3dof import PusherEnv3DOF
