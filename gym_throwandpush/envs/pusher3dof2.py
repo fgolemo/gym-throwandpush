@@ -6,7 +6,6 @@ import time
 import scipy
 from gym import utils, error, spaces
 
-from gym_throwandpush.envs import MujocoEnvPusher2
 from gym_throwandpush.envs.mujoco_env_pusher3dof import MujocoEnvPusher3Dof2
 
 NOT_INITIALIZED_ERR = "Before doing a reset or your first " \
