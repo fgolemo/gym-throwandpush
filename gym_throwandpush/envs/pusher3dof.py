@@ -26,7 +26,8 @@ class PusherEnv3Dof(mujoco_env.MujocoEnv, utils.EzPickle):
         reward_dist = - np.linalg.norm(vec_2)
         reward_ctrl = - np.square(a).sum()
         # reward = reward_dist + 0.1 * reward_ctrl + 0.5 * reward_near
-        reward = reward_dist + 0.1 * reward_ctrl
+        # reward = reward_dist + 0.1 * reward_ctrl
+        reward = reward_dist
 
         self.do_simulation(a, self.frame_skip)
         ob = self._get_obs()

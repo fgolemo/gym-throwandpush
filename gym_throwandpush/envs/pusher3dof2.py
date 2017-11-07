@@ -61,16 +61,16 @@ class Pusher3Dof2Env(MujocoEnvPusher3Dof2, utils.EzPickle):
         if not self.isInitialized:
             raise Exception(NOT_INITIALIZED_ERR)
 
-        # vec_1 = self.get_body_com("object") - self.get_body_com("tips_arm")
+        vec_1 = self.get_body_com("object") - self.get_body_com("distal_4")
         vec_2 = self.get_body_com("object") - self.get_body_com("goal")
 
-        a *= 3  # important - in the original env the range of actions is doubled
+        a *= 3  # important - in the original env the range of actions is tripled
 
-        # reward_near = - np.linalg.norm(vec_1)
+        reward_near = - np.linalg.norm(vec_1)
         reward_dist = - np.linalg.norm(vec_2)
         reward_ctrl = - np.square(a).sum()
-        # reward = reward_dist + 0.1 * reward_ctrl + 0.5 * reward_near
-        reward = reward_dist + 0.1 * reward_ctrl
+        reward = reward_dist + 0.1 * reward_ctrl + 0.5 * reward_near
+        # reward = reward_dist + 0.1 * reward_ctrl
 
         self.do_simulation(a, self.frame_skip)
         ob = self._get_obs()
