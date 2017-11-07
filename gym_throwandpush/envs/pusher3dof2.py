@@ -77,8 +77,9 @@ class Pusher3Dof2Env(MujocoEnvPusher3Dof2, utils.EzPickle):
         ob = self._get_obs()
         done = False
 
-        img = self.render('rgb_array')
-        img = scipy.misc.imresize(img, (128, 128, 3))
+        img = None
+        # img = self.render('rgb_array')
+        # img = scipy.misc.imresize(img, (128, 128, 3))
 
         return ob, reward, done, dict(img=img)
 
