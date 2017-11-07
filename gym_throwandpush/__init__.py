@@ -40,6 +40,6 @@ register(
 
 # new from Berkeley
 register(
-    id='Pusher3DOF-v1',
-    entry_point='gym_throwandpush.envs:PusherEnv3DOF',
+    id='Pusher3Dof-v0',
+    entry_point='gym_throwandpush.envs:PusherEnv3Dof',
 )
