@@ -8,3 +8,4 @@ from gym_throwandpush.envs.cheetah2plus import Cheetah2PlusEnv
 
 # from Berkeley
 from gym_throwandpush.envs.pusher3dof import PusherEnv3Dof
+from gym_throwandpush.envs.pusher3dof2 import Pusher3Dof2Env

@@ -43,3 +43,7 @@ register(
     id='Pusher3Dof-v0',
     entry_point='gym_throwandpush.envs:PusherEnv3Dof',
 )
+register(
+    id='Pusher3Dof2-v0',
+    entry_point='gym_throwandpush.envs:Pusher3Dof2Env',
+)

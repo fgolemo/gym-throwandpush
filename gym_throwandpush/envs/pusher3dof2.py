@@ -1,22 +1,67 @@
+#import torch
+import gym
 import numpy as np
 import time
-from gym import utils
-from gym.envs.mujoco import mujoco_env
-import scipy.misc
-import os
+
+import scipy
+from gym import utils, error, spaces
+
+from gym_throwandpush.envs import MujocoEnvPusher2
+from gym_throwandpush.envs.mujoco_env_pusher3dof import MujocoEnvPusher3Dof2
+
+NOT_INITIALIZED_ERR = "Before doing a reset or your first " \
+                      "step in the environment " \
+                      "please call env._init()."
+
+try:
+    import mujoco_py
+    from mujoco_py.mjlib import mjlib
+except ImportError as e:
+    raise error.DependencyNotInstalled(
+        "{}. (HINT: you need to install mujoco_py, and also perform the setup instructions here: https://github.com/openai/mujoco-py/.)".format(
+            e))
 
 
-class PusherEnv3Dof(mujoco_env.MujocoEnv, utils.EzPickle):
-    def __init__(self):
+class Pusher3Dof2Env(MujocoEnvPusher3Dof2, utils.EzPickle):
+    isInitialized = False
+
+    def _init(self, torques=[], topDown=False, colored=True):
+        params = {
+            "torques": torques,
+        }
+        if topDown:
+            self.viewer_setup = self.top_down_cam
+
+        self.isInitialized = True
         utils.EzPickle.__init__(self)
-        # if hasattr(self, "_kwargs") and 'colored' in self._kwargs and self._kwargs["colored"]:
-        #     model_path = '3link_gripper_push_2d-colored.xml'
-        # else:
-        model_path = '3link_gripper_push_2d.xml'
-        full_model_path = os.path.join(os.path.dirname(__file__), "assets", model_path)
-        mujoco_env.MujocoEnv.__init__(self, full_model_path, 5)
+        xml = '3link_gripper_push_2d'
+        if colored:
+            xml += "-colored"
+
+        MujocoEnvPusher3Dof2.__init__(self, xml + '.xml', 5, params)
+
+    def __init__(self):
+        self.metadata = {
+            'render.modes': ['human', 'rgb_array'],
+            'video.frames_per_second': 50
+        }
+        self.obs_dim = 12
+
+        self.action_space = spaces.Box(
+            -np.ones(3),
+            np.ones(3)
+        )
+
+        high = np.inf * np.ones(self.obs_dim)
+        low = -high
+        self.observation_space = spaces.Box(low, high)
+
+        self._seed()
 
     def _step(self, a):
+        if not self.isInitialized:
+            raise Exception(NOT_INITIALIZED_ERR)
+
         # vec_1 = self.get_body_com("object") - self.get_body_com("tips_arm")
         vec_2 = self.get_body_com("object") - self.get_body_com("goal")
 
@@ -67,15 +112,6 @@ class PusherEnv3Dof(mujoco_env.MujocoEnv, utils.EzPickle):
                 geompostemp[body, 0] = pos_x
                 geompostemp[body, 1] = pos_y
 
-        # if hasattr(self, "_kwargs") and 'geoms' in self._kwargs:
-        #     geoms = self._kwargs['geoms']
-        #     ct = 0
-        #     for body in range(len(geompostemp)):
-        #         if 'object' in str(self.model.geom_names[body]):
-        #             geompostemp[body, 0] = geoms[ct][1]
-        #             geompostemp[body, 1] = geoms[ct][2]
-        #             ct += 1
-
         self.model.geom_pos = geompostemp
 
         qpos[-4:-2] = self.object
@@ -95,68 +131,34 @@ class PusherEnv3Dof(mujoco_env.MujocoEnv, utils.EzPickle):
         ])
 
 
-from tkinter import *
-
-
-class PusherCtrlGui:
-    def __init__(self, env):
-        self.env = env
-        self.root = Tk()
-        self.slider1 = Scale(self.root, variable=0.1, from_=-3, to=3, resolution=.1,
-                             orient="horizontal")
-        self.slider2 = Scale(self.root, variable=0, from_=-3, to=3, resolution=.1,
-                             orient="horizontal")
-        self.slider3 = Scale(self.root, variable=-0.1, from_=-3, to=3, resolution=.1,
-                             orient="horizontal")
-
-        b = Button(self.root, text="STEP", command=self.button_step)
-        b.pack()
-
-        b = Button(self.root, text="RESET", command=self.button_reset)
-        b.pack()
-
-        self.slider1.pack()
-        self.slider2.pack()
-        self.slider3.pack()
-
-        self.root.bind("<space>", self.key_step)
-
-        self.root.mainloop()
-
-    def key_step(self, event):
-        self.button_step()
-
-    def button_step(self):
-        action = [self.slider1.get(), self.slider2.get(), self.slider3.get()]
-        # print (action)
-        obs, rew, done, misc = self.env.step(action)
-        print(np.around(obs, 2), rew, misc["img"].shape)
-        self.env.render()
-
-    def button_reset(self):
-        self.slider1.set(0.0)
-        self.slider2.set(0.0)
-        self.slider3.set(0.0)
-        self.env.reset()
-        self.env.render()
-
-
 if __name__ == '__main__':
-    import gym
     import gym_throwandpush
 
-    env = gym.make("Pusher3Dof-v0")
+    env = gym.make("Pusher3Dof2-v0")
+    env._init(
+        torques=[1, 10, .001],
+        colored=True
+    )
     env.reset()
-    env.render()
-
-    app = PusherCtrlGui(env)
 
 
+    # def split_obs(obs):
+    #     qpos = obs[:7]  # robot has 7 DOF, so 7 angular positions
+    #     qvel = obs[7:14]  # 7 angular velocities
+    #     # these two above vectors are what's interesting for sim+
     #
-    # for i in range(100):
-    #     env.render()
-    #     action = env.action_space.sample()
-    #     print(action)
-    #     obs, reward, done, misc = env.step(action)
-    #     print(obs, reward, done, misc)
-    #     # time.sleep(1)
+    #     tip_pos = obs[14:17]  # 1 tip position in 3D space
+    #     obj_pos = obs[17:20]  # 1 object position in 3D space
+    #     gol_pos = obs[20:23]  # 1 goal position in 3D space
+    #     return (qpos, qvel, tip_pos, obj_pos, gol_pos)
+
+
+    for i in range(100):
+        env.render()
+        action = env.action_space.sample()
+        print(action)
+        obs, reward, done, misc = env.step(action)
+        # obs_tup = split_obs(np.around(obs, 3))
+        print (np.around(obs, 2))
+        # print(obs_tup)
+        # time.sleep(1)
