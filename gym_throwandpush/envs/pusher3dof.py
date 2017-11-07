@@ -7,14 +7,14 @@ import os
 
 
 class PusherEnv3Dof(mujoco_env.MujocoEnv, utils.EzPickle):
-    itr = 0
-
     def __init__(self):
         utils.EzPickle.__init__(self)
+        # if hasattr(self, "_kwargs") and 'colored' in self._kwargs and self._kwargs["colored"]:
+        #     model_path = '3link_gripper_push_2d-colored.xml'
+        # else:
         model_path = '3link_gripper_push_2d.xml'
         full_model_path = os.path.join(os.path.dirname(__file__), "assets", model_path)
         mujoco_env.MujocoEnv.__init__(self, full_model_path, 5)
-        self.itr = 0
 
     def _step(self, a):
         # vec_1 = self.get_body_com("object") - self.get_body_com("tips_arm")
@@ -34,13 +34,12 @@ class PusherEnv3Dof(mujoco_env.MujocoEnv, utils.EzPickle):
 
         img = self.render('rgb_array')
         # idims = self._kwargs['imsize']
-        img = scipy.misc.imresize(img, (128,128,3))
+        img = scipy.misc.imresize(img, (128, 128, 3))
 
-        self.itr += 1
         return ob, reward, done, dict(img=img)
 
     def viewer_setup(self):
-        coords = [.7,-.5,0]
+        coords = [.7, -.5, 0]
         for i in range(3):
             self.viewer.cam.lookat[i] = coords[i]
         self.viewer.cam.trackbodyid = -1
@@ -48,7 +47,6 @@ class PusherEnv3Dof(mujoco_env.MujocoEnv, utils.EzPickle):
 
     def reset_model(self):
 
-        self.itr = 0
         qpos = self.np_random.uniform(low=-0.1, high=0.1, size=self.model.nq) + self.init_qpos
         while True:
             object_ = [np.random.uniform(low=-1.0, high=-0.4),
@@ -85,7 +83,6 @@ class PusherEnv3Dof(mujoco_env.MujocoEnv, utils.EzPickle):
         qpos[-2:] = self.goal
         qvel = self.init_qvel
         qvel[-4:] = 0
-        print (qpos, qvel)
         self.set_state(qpos, qvel)
         return self._get_obs()
 
@@ -93,25 +90,25 @@ class PusherEnv3Dof(mujoco_env.MujocoEnv, utils.EzPickle):
         return np.concatenate([
             self.model.data.qpos.flat[:-4],
             self.model.data.qvel.flat[:-4],
-            self.get_body_com("distal_4"),
-            self.get_body_com("object"),
-            self.get_body_com("goal"),
+            self.get_body_com("distal_4")[:2],
+            self.get_body_com("object")[:2],
+            self.get_body_com("goal")[:2],
         ])
 
+
 from tkinter import *
+
 
 class PusherCtrlGui:
     def __init__(self, env):
         self.env = env
         self.root = Tk()
         self.slider1 = Scale(self.root, variable=0.1, from_=-3, to=3, resolution=.1,
-                               orient="horizontal")
+                             orient="horizontal")
         self.slider2 = Scale(self.root, variable=0, from_=-3, to=3, resolution=.1,
-                               orient="horizontal")
+                             orient="horizontal")
         self.slider3 = Scale(self.root, variable=-0.1, from_=-3, to=3, resolution=.1,
-                               orient="horizontal")
-
-
+                             orient="horizontal")
 
         b = Button(self.root, text="STEP", command=self.button_step)
         b.pack()
@@ -134,7 +131,7 @@ class PusherCtrlGui:
         action = [self.slider1.get(), self.slider2.get(), self.slider3.get()]
         # print (action)
         obs, rew, done, misc = self.env.step(action)
-        print (np.around(obs,2), rew, misc["img"].shape)
+        print(np.around(obs, 2), rew, misc["img"].shape)
         self.env.render()
 
     def button_reset(self):
@@ -144,16 +141,8 @@ class PusherCtrlGui:
         self.env.reset()
         self.env.render()
 
-    # def updateValue(self, event):
-    #     print("new value:", self.slider.get())
-
-
-
-
 
 if __name__ == '__main__':
-
-
     import gym
     import gym_throwandpush
 
