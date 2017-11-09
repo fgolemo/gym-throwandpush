@@ -132,7 +132,7 @@ class PusherCtrlGui:
         action = [self.slider1.get(), self.slider2.get(), self.slider3.get()]
         # print (action)
         obs, rew, done, misc = self.env.step(action)
-        print(np.around(obs, 2), rew, misc["img"].shape)
+        print(np.around(obs, 2), rew)
         self.env.render()
 
     def button_reset(self):

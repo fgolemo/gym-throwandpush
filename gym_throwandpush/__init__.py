@@ -3,7 +3,7 @@ from gym.envs.registration import register
 register(
     id='Pusher2-v0',
     entry_point='gym_throwandpush.envs:Pusher2Env',
-    max_episode_steps=500,
+    max_episode_steps=100,
     reward_threshold=0.0,
 )
 
@@ -22,7 +22,7 @@ register(
 register(
     id='HalfCheetah2-v0',
     entry_point='gym_throwandpush.envs:Cheetah2Env',
-    max_episode_steps=500,
+    max_episode_steps=1000,
     reward_threshold=4800.0,
 )
 
@@ -42,8 +42,12 @@ register(
 register(
     id='Pusher3Dof-v0',
     entry_point='gym_throwandpush.envs:PusherEnv3Dof',
+    max_episode_steps=100,
+    reward_threshold=0.0,
 )
 register(
     id='Pusher3Dof2-v0',
     entry_point='gym_throwandpush.envs:Pusher3Dof2Env',
+    max_episode_steps=100,
+    reward_threshold=0.0,
 )
