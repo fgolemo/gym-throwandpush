@@ -135,7 +135,7 @@ if __name__ == '__main__':
     import gym_throwandpush
 
     env = gym.make("Pusher3Dof2-v0")
-    env._init(
+    env.env._init(
         torques=[1, 10, .001],
         colored=True
     )
