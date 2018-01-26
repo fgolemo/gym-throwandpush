@@ -24,9 +24,11 @@ except ImportError as e:
 class Pusher3Dof2Env(MujocoEnvPusher3Dof2, utils.EzPickle):
     isInitialized = False
 
-    def _init(self, torques=[], topDown=False, colored=True):
+    def _init(self, torques=[], distal_1=0.5, distal_2=0.4, topDown=False, colored=True):
         params = {
             "torques": torques,
+            "distal_1": distal_1,
+            "distal_2": distal_2
         }
         if topDown:
             self.viewer_setup = self.top_down_cam

@@ -43,6 +43,15 @@ class MujocoEnvPusher3Dof2(MujocoEnv):
         tree = ET.ElementTree(file=xml_file)
         root = tree.getroot()
 
+        bodies = "/".join(["body"]*2)
+        arm = root.find('worldbody/{}/geom'.format(bodies))
+        arm.set('fromto', '0 0 0 {} 0 0'.format(str(0.5)))
+
+        for i, arm_name in enumerate(["distal_1", "distal_2"]):
+            bodies = "/".join(["body"]*(i+3))
+            arm = root.find('worldbody/{}/geom'.format(bodies))
+            arm.set('fromto', '0 0 0 {} 0 0'.format(str(model_parameters[arm_name])))
+
         for joint_idx,joint_name in enumerate(["proximal_j_1","distal_j_1", "distal_j_2"]):
             joint = root.find('actuator/motor[@joint="{}"]'.format(joint_name))
             joint.set('gear', str(float(model_parameters["torques"][joint_idx])))
