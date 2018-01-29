@@ -77,4 +77,9 @@
         <motor joint="distal_j_2" ctrlrange="-3 3" ctrllimited="true"/>
         <!--<motor joint="distal_j_3" ctrlrange="-3 3" ctrllimited="true"/>-->
     </actuator>
+    <equality>
+        <joint name="backlash1" joint1="proximal_j_1" polycoef="3 0 0 0 0" solimp="0.01 0.5 10"/>
+        <joint name="backlash2" joint1="distal_j_1" polycoef="3 0 0 0 0" solimp="0.01 0.5 10"/>
+         <!--solref="0.02 0.2" -->
+    </equality>
 </mujoco>
