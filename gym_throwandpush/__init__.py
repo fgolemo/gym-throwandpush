@@ -51,3 +51,9 @@ register(
     max_episode_steps=100,
     reward_threshold=0.0,
 )
+
+register(
+    id='Pusher3Dof2Pixel-v0',
+    entry_point='gym_throwandpush.envs:Pusher3Dof2PixelEnv',
+    kwargs={'base_env_id': 'Pusher3Dof2-v0'}
+)
