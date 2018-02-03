@@ -10,4 +10,5 @@ from gym_throwandpush.envs.cheetah2plus import Cheetah2PlusEnv
 from gym_throwandpush.envs.pusher3dof import PusherEnv3Dof
 
 from gym_throwandpush.envs.pusher3dof2 import Pusher3Dof2Env
+from gym_throwandpush.envs.pusher3dof2plus import Pusher3Dof2Plus
 from gym_throwandpush.envs.pusher3dof2pixel import Pusher3Dof2PixelEnv
