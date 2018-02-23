@@ -4,7 +4,6 @@ from gym import spaces
 from torch import from_numpy, load
 from torch.autograd import Variable
 
-
 class Pusher3DofInferenceWrapper(gym.ObservationWrapper):
     def __init__(self, env):
         super(Pusher3DofInferenceWrapper, self).__init__(env)

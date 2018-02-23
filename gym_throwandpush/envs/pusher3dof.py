@@ -16,11 +16,11 @@ class PusherEnv3Dof(mujoco_env.MujocoEnv, utils.EzPickle):
         full_model_path = os.path.join(os.path.dirname(__file__), "assets", model_path)
         mujoco_env.MujocoEnv.__init__(self, full_model_path, 5)
 
-    def _step(self, a):
+    def _step(self, action):
         # vec_1 = self.get_body_com("object") - self.get_body_com("tips_arm")
         vec_2 = self.get_body_com("object") - self.get_body_com("goal")
 
-        a *= 3  # important - in the original env the range of actions is doubled
+        a = 3 * action  # important - in the original env the range of actions is doubled
 
         # reward_near = - np.linalg.norm(vec_1)
         reward_dist = - np.linalg.norm(vec_2)
