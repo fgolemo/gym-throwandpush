@@ -68,7 +68,7 @@ class Pusher3Dof2Env(MujocoEnvPusher3Dof2, utils.EzPickle):
         vec_1 = self.get_body_com("object") - self.get_body_com("distal_4")
         vec_2 = self.get_body_com("object") - self.get_body_com("goal")
 
-        a = 3 * action  # important - in the original env the range of actions is tripled
+        a = 3 * action.copy()  # important - in the original env the range of actions is tripled
 
         reward_near = - np.linalg.norm(vec_1)
         reward_dist = - np.linalg.norm(vec_2)
