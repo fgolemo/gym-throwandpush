@@ -61,3 +61,8 @@ register(
     entry_point='gym_throwandpush.envs:Pusher3Dof2Plus',
     kwargs={'base_env_id': 'Pusher3Dof2-v0'},
 )
+register(
+    id='Pusher3Dof2Plus2-v0',
+    entry_point='gym_throwandpush.envs:Pusher3Dof2Plus2',
+    kwargs={'base_env_id': 'Pusher3Dof2-v0'},
+)
