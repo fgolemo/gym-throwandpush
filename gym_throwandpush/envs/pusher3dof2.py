@@ -40,7 +40,7 @@ class Pusher3Dof2Env(MujocoEnvPusher3Dof2, utils.EzPickle):
         # xml = '3link_gripper_push_2d_backlash.xml'
         if colored:
             xml += "-colored"
-
+        print ("loading XML:"+xml)
         MujocoEnvPusher3Dof2.__init__(self, xml + '.xml', 5, params)
 
     def __init__(self):
@@ -140,8 +140,9 @@ if __name__ == '__main__':
 
     env = gym.make("Pusher3Dof2-v0")
     env.env._init(
-        torques=[1, 10, .001],
-        colored=True
+        torques=[1, 1, 1],
+        xml='3link_gripper_push_2d_backlash',
+        colored=False
     )
     env.reset()
 
