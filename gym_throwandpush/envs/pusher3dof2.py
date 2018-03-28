@@ -24,7 +24,7 @@ except ImportError as e:
 class Pusher3Dof2Env(MujocoEnvPusher3Dof2, utils.EzPickle):
     isInitialized = False
 
-    def _init(self, torques=[], proximal_1=0.4, distal_1=0.4, distal_2=0.4, topDown=False, colored=True, xml='3link_gripper_push_2d'):
+    def _init(self, torques=[1,1,1], proximal_1=0.4, distal_1=0.4, distal_2=0.4, topDown=False, colored=True, xml='3link_gripper_push_2d'):
         params = {
             "torques": torques,
             "proximal_1": proximal_1,
