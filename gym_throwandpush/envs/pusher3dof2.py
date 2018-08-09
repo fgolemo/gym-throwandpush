@@ -1,4 +1,4 @@
-#import torch
+# import torch
 import gym
 import numpy as np
 import time
@@ -24,12 +24,25 @@ except ImportError as e:
 class Pusher3Dof2Env(MujocoEnvPusher3Dof2, utils.EzPickle):
     isInitialized = False
 
-    def _init(self, torques=[1,1,1], proximal_1=0.4, distal_1=0.4, distal_2=0.4, topDown=False, colored=True, xml='3link_gripper_push_2d'):
+    def _init(self,
+              torques=[1, 1, 1],
+              proximal_1=0.4,
+              distal_1=0.4,
+              distal_2=0.4,
+              density_arm=1000,
+              density_obj=0.00001,
+              friction_obj=0.5,
+              topDown=False,
+              colored=True,
+              xml='3link_gripper_push_2d'):
         params = {
             "torques": torques,
             "proximal_1": proximal_1,
             "distal_1": distal_1,
             "distal_2": distal_2,
+            "density_arm": density_arm,
+            "density_obj": density_obj,
+            "friction_obj": friction_obj
         }
         if topDown:
             self.viewer_setup = self.top_down_cam
@@ -40,7 +53,7 @@ class Pusher3Dof2Env(MujocoEnvPusher3Dof2, utils.EzPickle):
         # xml = '3link_gripper_push_2d_backlash.xml'
         if colored:
             xml += "-colored"
-        print ("loading XML:"+xml)
+        print("loading XML:" + xml)
         MujocoEnvPusher3Dof2.__init__(self, xml + '.xml', 5, params)
 
     def __init__(self):
@@ -141,11 +154,14 @@ if __name__ == '__main__':
     env = gym.make("Pusher3Dof2-v0")
     env.env._init(
         torques=[1, 1, 1],
-        xml='3link_gripper_push_2d_backlash',
+        density_arm=10000,
+        density_obj=0.01,
+        friction_obj=0.001,
+        # xml='3link_gripper_push_2d_backlash',
+        xml='3link_gripper_push_2d',
         colored=False
     )
     env.reset()
-
 
     # def split_obs(obs):
     #     qpos = obs[:7]  # robot has 7 DOF, so 7 angular positions
@@ -157,13 +173,12 @@ if __name__ == '__main__':
     #     gol_pos = obs[20:23]  # 1 goal position in 3D space
     #     return (qpos, qvel, tip_pos, obj_pos, gol_pos)
 
-
-    for i in range(100):
+    for i in range(500):
         env.render()
         action = env.action_space.sample()
         print(action)
         obs, reward, done, misc = env.step(action)
         # obs_tup = split_obs(np.around(obs, 3))
-        print (np.around(obs, 2))
+        print(np.around(obs, 2))
         # print(obs_tup)
         # time.sleep(1)

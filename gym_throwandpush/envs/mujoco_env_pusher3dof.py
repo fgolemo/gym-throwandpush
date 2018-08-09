@@ -44,15 +44,26 @@ class MujocoEnvPusher3Dof2(MujocoEnv):
         root = tree.getroot()
 
         for i, arm_name in enumerate(["proximal_1", "distal_1", "distal_2"]):
-            bodies = "/".join(["body"]*(i+2))
+            bodies = "/".join(["body"] * (i + 2))
             arm = root.find('worldbody/{}/geom'.format(bodies))
             arm.set('fromto', '0 0 0 {} 0 0'.format(str(model_parameters[arm_name])))
+            arm.set('density', '{}'.format(str(model_parameters["density_arm"])))
             next_arm_pos = root.find('worldbody/{}/body'.format(bodies))
             next_arm_pos.set('pos', '{} 0 0'.format(str(model_parameters[arm_name])))
 
-        for joint_idx,joint_name in enumerate(["proximal_j_1","distal_j_1", "distal_j_2"]):
+        for joint_idx, joint_name in enumerate(["proximal_j_1", "distal_j_1", "distal_j_2"]):
             joint = root.find('actuator/motor[@joint="{}"]'.format(joint_name))
             joint.set('gear', str(float(model_parameters["torques"][joint_idx])))
+
+        obj = root.find('worldbody/body[@name="object"]/geom')
+        obj.set('density', '{}'.format(str(model_parameters["density_obj"])))
+
+        for fric_angle in ["x","y"]:
+            obj_fric = root.find('worldbody/body[@name="object"]/joint[@name="obj_slide{}"]'.format(fric_angle))
+            obj_fric.set('damping', '{}'.format(str(model_parameters["friction_obj"])))
+
+        obj = root.find('worldbody/body[@name="object"]/geom')
+        obj.set('density', '{}'.format(str(model_parameters["density_obj"])))
 
         file_name = os.path.basename(xml_file)
         tmp_dir = tempfile.gettempdir()
