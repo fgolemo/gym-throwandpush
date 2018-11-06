@@ -11,5 +11,15 @@ from gym_throwandpush.envs.pusher3dof import PusherEnv3Dof
 
 from gym_throwandpush.envs.pusher3dof2 import Pusher3Dof2Env
 from gym_throwandpush.envs.pusher3dof2plus import Pusher3Dof2Plus
+from gym_throwandpush.envs.pusher3dof2lstm import Pusher3Dof2Lstm
 from gym_throwandpush.envs.pusher3dof2plus2 import Pusher3Dof2Plus2
 from gym_throwandpush.envs.pusher3dof2pixel import Pusher3Dof2PixelEnv
+from gym_throwandpush.envs.pusher3dof2_inverse import Pusher3Dof2Inverse
+from gym_throwandpush.envs.striker import StrikerEnv
+from gym_throwandpush.envs.striker_backlash import StrikerEnv2
+from gym_throwandpush.envs.striker_plus import StrikerPlus
+from gym_throwandpush.envs.striker_lstm import StrikerLstm
+from gym_throwandpush.envs.striker3dof import StrikerEnv3Dof
+from gym_throwandpush.envs.striker3dof2 import StrikerEnv3Dof2
+from gym_throwandpush.envs.thrower_backlash import ThrowerEnv
+from gym_throwandpush.envs.thrower_plus import ThrowerPlus

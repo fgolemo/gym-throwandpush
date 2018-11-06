@@ -1,13 +1,13 @@
 import gym
 import gym_throwandpush
 
-env = gym.make("Pusher3Dof2-v0")
-env.env._init(
-    torques=[1.,1.,1.],
-    proximal_1=0.41,
-    distal_1=0.38,
-    distal_2=0.41,
-)
+env = gym.make("Striker3Dof-v0")
+# env.env._init(
+#     torques=[1.,1.,1.],
+#     proximal_1=0.41,
+#     distal_1=0.38,
+#     distal_2=0.41,
+# )
 
 env.reset()
 env.render()
